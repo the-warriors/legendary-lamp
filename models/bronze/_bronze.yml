@@ -1,0 +1,9 @@
+version: 2
+models:
+  - name: brz_etoll_plaza
+    description: Raw e-toll plaza reference file from the motorway_ext volume, all columns as strings
+    columns:
+      - name: motorway_id
+        tests: [not_null]
+      - name: plaza_id
+        tests: [not_null]

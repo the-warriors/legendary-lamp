@@ -1,0 +1,42 @@
+version: 2
+models:
+  - name: stg_etoll_plaza
+    description: >
+      Cleaned e-toll plaza reference data. Grain is one toll point
+      (motorway_id, plaza_id, lane_id, trip_description). Coordinates that fall
+      outside Australia are nulled and flagged in entry_coord_status.
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns: [motorway_id, plaza_id, lane_id, trip_description]
+    columns:
+      - name: motorway_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('motorway_reference')
+              field: motorway_id
+      - name: plaza_id
+        description: Plaza identifier as a string (keeps leading zeros)
+        tests: [not_null]
+      - name: lane_id
+        tests: [not_null]
+      - name: entry_latitude
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: -44
+              max_value: -10
+      - name: entry_longitude
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 112
+              max_value: 154
+      - name: entry_coord_status
+        description: valid / missing / invalid (invalid = original value outside Australia)
+        tests:
+          - accepted_values:
+              values: ['valid', 'missing', 'invalid']
+          - accepted_values:
+              name: no_invalid_entry_coordinates
+              values: ['valid', 'missing']
+              config:
+                severity: warn

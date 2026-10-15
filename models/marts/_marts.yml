@@ -1,0 +1,54 @@
+version: 2
+models:
+  - name: dim_toll_point
+    description: E-toll toll points (plaza + lane + trip) with state, H3 cell and coordinate quality
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: toll_point_key
+        data_type: string
+        tests: [unique, not_null]
+      - name: motorway_id
+        data_type: int
+        tests: [not_null]
+      - name: motorway_short_name
+        data_type: string
+      - name: motorway_name
+        data_type: string
+      - name: state
+        data_type: string
+        tests: [not_null]
+      - name: facility_type
+        data_type: string
+      - name: plaza_id
+        data_type: string
+      - name: lane_id
+        data_type: int
+      - name: trip_description
+        data_type: string
+      - name: entry_gantry_reference
+        data_type: string
+      - name: exit_gantry_reference
+        data_type: string
+      - name: entry_latitude
+        data_type: double
+      - name: entry_longitude
+        data_type: double
+      - name: exit_latitude
+        data_type: double
+      - name: exit_longitude
+        data_type: double
+      - name: entry_coord_status
+        data_type: string
+      - name: entry_h3_r9
+        data_type: bigint
+      - name: is_entry_exit_pair
+        data_type: boolean
+
+  - name: dim_motorway
+    description: One row per motorway / toll facility with toll point counts and coordinate coverage
+    columns:
+      - name: motorway_id
+        tests: [unique, not_null]
+      - name: state
+        tests: [not_null]

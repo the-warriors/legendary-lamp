@@ -1,0 +1,15 @@
+version: 2
+seeds:
+  - name: motorway_reference
+    description: Hand-maintained lookup of state and facility type per motorway_id (not in the source file)
+    columns:
+      - name: motorway_id
+        tests: [unique, not_null]
+      - name: state
+        tests:
+          - accepted_values:
+              values: ['NSW', 'VIC', 'QLD']
+      - name: facility_type
+        tests:
+          - accepted_values:
+              values: ['motorway', 'airport']
